@@ -8,8 +8,8 @@ namespace ContactBook.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        public IUserService userService;
-        public ITokenService tokenService;
+        private readonly IUserService userService;
+        private readonly ITokenService tokenService;
         public AuthController(IUserService userService, ITokenService tokenService)
         {
             this.userService = userService;
