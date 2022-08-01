@@ -4,9 +4,9 @@ namespace ContactBook.Interfaces
 {
     public interface IUserService
     {
-        User GetUserByEmail(string userEmail);
+        public User GetUserByEmail(string userEmail);
         User GetUserById(Guid userId);
-        ResponseMessage CreateNewUser(UserRegisterDTO user);
+        ResponseMessage CreateNewUser(UserRegisterDTO user, out bool isUserCreate);
         bool DoesUserEmailExist(string userEmail);
     }
 }

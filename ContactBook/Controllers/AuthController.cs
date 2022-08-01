@@ -18,12 +18,10 @@ namespace ContactBook.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register(UserRegisterDTO request)
         {
-            var newUser = userService.GetUserByEmail(request.Email);
-            if (newUser == null)
-            {
-                return Ok(userService.CreateNewUser(request));
-            }
-            return BadRequest(userService.CreateNewUser(request));
+            ResponseMessage response = userService.CreateNewUser(request, out bool isUserCreate);
+            if (isUserCreate)
+                return Ok(response);
+            return BadRequest(response);
         }
 
         [HttpPost("login")]
