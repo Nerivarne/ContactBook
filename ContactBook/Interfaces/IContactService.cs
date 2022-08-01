@@ -6,8 +6,8 @@ namespace ContactBook.Interfaces
     {
         ResponseMessage CreateContact(NewContactDTO request, User user, out bool isContactCreate);
         Contact GetContactById(int contactId);
-        ResponseMessage EditContact(EditContactDTO input, Contact editedContact, out bool validRequest);
-        bool IsEditFormValid(EditContactDTO input);
-        ResponseMessage DeleteRoomReservation(string deletionToken, int roomReservationId, out bool deletionSuccessful);
+        ResponseMessage EditContact(EditContactDTO input, Contact editedContact, User user, out bool isEdited);
+        ContactDTO ShowMeMyContact(int contactId, User user, out bool isValid);
+        ResponseMessage DeleteContact(int contactId, User user, out bool isDeleted);
     }
 }

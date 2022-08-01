@@ -22,30 +22,44 @@ namespace ContactBook.Controllers
         {
             var loggedInUser = tokenService.GetLoggedInUser();
             ResponseMessage response = contactService.CreateContact(newContact, loggedInUser, out bool isContactCreate);
-               if (isContactCreate)
+            if (isContactCreate)
                 return Ok(response);
             return BadRequest(response);
         }
 
-        [HttpGet("")]
+        [HttpGet("{contactId}")]
         [Authorize]
-        public IActionResult ListContacts()
+        public IActionResult Contact([FromRoute] int contactId)
         {
-            return Ok();
+            var loggedInUser = tokenService.GetLoggedInUser();
+            var contactDTO = contactService.ShowMeMyContact(contactId, loggedInUser, out bool isValid);
+            //var contact = contactService.GetContactById(contactId);
+            if (contactDTO != null)
+                return Ok(contactDTO);
+            return BadRequest();
         }
 
         [HttpPatch("")]
         [Authorize]
-        public IActionResult EditContact()
+        public IActionResult EditContact([FromBody] EditContactDTO request)
         {
-            return Ok();
+            var loggedInUser = tokenService.GetLoggedInUser();
+            var editedContact = contactService.GetContactById(request.ContactId);
+            var response = contactService.EditContact(request, editedContact, loggedInUser, out bool isEdited);
+            if (isEdited)
+                return Ok(response);
+            return BadRequest(response);
         }
 
-        [HttpDelete("")]
+        [HttpDelete("{contactId}")]
         [Authorize]
-        public IActionResult DeleteContact()
+        public IActionResult DeleteContact([FromRoute] int contactId)
         {
-            return Ok();
+            var loggedInUser = tokenService.GetLoggedInUser();
+            var response = contactService.DeleteContact(contactId, loggedInUser, out bool isDeleted);
+            if (isDeleted)
+                return Ok(response);
+            return BadRequest(response);
         }
 
     }
