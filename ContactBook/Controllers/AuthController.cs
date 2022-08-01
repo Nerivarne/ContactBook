@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ContactBook.Interfaces;
+using ContactBook.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ContactBook.Controllers
 {
@@ -6,20 +8,36 @@ namespace ContactBook.Controllers
     [ApiController]
     public class AuthController : Controller
     {
-        public AuthController()
+        public IUserService userService;
+        public ITokenService tokenService;
+        public AuthController(IUserService userService, ITokenService tokenService)
         {
-
+            this.userService = userService;
+            this.tokenService = tokenService;
         }
         [HttpPost("register")]
-        public async Task<ActionResult> Register()
+        public async Task<ActionResult> Register(UserRegisterDTO request)
         {
-            return Ok();
+            var newUser = userService.GetUserByEmail(request.Email);
+            if (newUser == null)
+            {
+                return Ok(userService.CreateNewUser(request));
+            }
+            return BadRequest(userService.CreateNewUser(request));
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<string>> Login()
+        public async Task<ActionResult<string>> Login(UserLoginDTO request)
         {
-            return Ok();
+            var actualUser = userService.GetUserByEmail(request.Email);
+            if (actualUser == null || !actualUser.PasswordCheck(request.Password))
+            {
+                return BadRequest("User not found or the password you entered is incorrect");
+            }
+
+            string token = tokenService.CreateLoginToken(actualUser);
+
+            return Ok(token);
         }
     }
 }
