@@ -1,7 +1,6 @@
 ﻿using ContactBook.Database;
 using ContactBook.Interfaces;
 using ContactBook.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ContactBook.Services
 {
@@ -12,7 +11,7 @@ namespace ContactBook.Services
         {
             this.database = database;
         }
-        public ResponseMessage CreateContact(NewContactDTO request, User user, out bool isContactCreate)
+        public ResponseMessage CreateContact(NewContactDTO request, User user, out bool isContactCreated)
         {
             var newContact = new Contact()
             {
@@ -25,7 +24,7 @@ namespace ContactBook.Services
             };
             if (newContact == null)
             {
-                isContactCreate = false;
+                isContactCreated = false;
                 return new ResponseMessage()
                 {
                     Message = "Contact cannot be added"
@@ -34,7 +33,7 @@ namespace ContactBook.Services
             }
             else
             {
-                isContactCreate = true;
+                isContactCreated = true;
                 database.Contacts.Add(newContact);
                 database.SaveChanges();
                 return new ResponseMessage()
@@ -45,7 +44,7 @@ namespace ContactBook.Services
             }
         }
 
-        public ResponseMessage EditContact(EditContactDTO input, Contact editedContact, User user, out bool isEdited)
+        public ResponseMessage EditContact(EditContactDTO input, Contact editedContact, User user, out bool isContactEdited)
         {
             if (editedContact != null && editedContact.UserId == user.Id)
             {
@@ -60,13 +59,13 @@ namespace ContactBook.Services
                 if (!string.IsNullOrEmpty(input.NewAddress))
                     editedContact.Address = input.NewAddress;
                 database.SaveChanges();
-                isEdited = true;
+                isContactEdited = true;
                 return new ResponseMessage
                 {
                     Message = "Contact has been changed"
                 };
             }
-            isEdited = false;
+            isContactEdited = false;
             return new ResponseMessage
             {
                 Message = "This contact does not exist in your account"
@@ -81,16 +80,16 @@ namespace ContactBook.Services
         public ContactDTO ShowMeMyContact(int contactId, User user, out bool isValid)
         {
             var contact = GetContactById(contactId);
-            var contactDTO = new ContactDTO()
-            {
-                FirstName = contact.FirstName,
-                LastName = contact.LastName,
-                TelephoneNumber = contact.TelephoneNumber,
-                Email = contact.Email,
-                Address = contact.Address,
-            };
             if (contact != null && contact.UserId == user.Id)
             {
+                var contactDTO = new ContactDTO()
+                {
+                    FirstName = contact.FirstName,
+                    LastName = contact.LastName,
+                    TelephoneNumber = contact.TelephoneNumber,
+                    Email = contact.Email,
+                    Address = contact.Address,
+                };
                 isValid = true;
                 return contactDTO;
             }
@@ -99,20 +98,20 @@ namespace ContactBook.Services
 
         }
 
-        public ResponseMessage DeleteContact(int contactId, User user, out bool isDeleted)
+        public ResponseMessage DeleteContact(int contactId, User user, out bool isContactDeleted)
         {
             var contact = GetContactById(contactId);
             if (contact != null && contact.UserId == user.Id)
             {
                 database.Contacts.Remove(contact);
                 database.SaveChanges();
-                isDeleted = true;
+                isContactDeleted = true;
                 return new ResponseMessage
                 {
                     Message = "Contact has been deleted"
                 };
             }
-            isDeleted = false;
+            isContactDeleted = false;
             return new ResponseMessage
             {
                 Message = "This contact does not exist in your account"

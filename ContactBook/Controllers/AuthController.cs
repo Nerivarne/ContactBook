@@ -15,11 +15,12 @@ namespace ContactBook.Controllers
             this.userService = userService;
             this.tokenService = tokenService;
         }
+
         [HttpPost("register")]
         public async Task<ActionResult> Register(UserRegisterDTO request)
         {
-            ResponseMessage response = userService.CreateNewUser(request, out bool isUserCreate);
-            if (isUserCreate)
+            ResponseMessage response = userService.CreateNewUser(request, out bool isUserCreated);
+            if (isUserCreated)
                 return Ok(response);
             return BadRequest(response);
         }

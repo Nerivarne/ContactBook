@@ -16,13 +16,14 @@ namespace ContactBook.Controllers
             this.tokenService = tokenService;
             this.contactService = contactService;
         }
+
         [HttpPost("")]
         [Authorize]
         public IActionResult AddNewContact([FromBody] NewContactDTO newContact)
         {
             var loggedInUser = tokenService.GetLoggedInUser();
-            ResponseMessage response = contactService.CreateContact(newContact, loggedInUser, out bool isContactCreate);
-            if (isContactCreate)
+            ResponseMessage response = contactService.CreateContact(newContact, loggedInUser, out bool isContactCreated);
+            if (isContactCreated)
                 return Ok(response);
             return BadRequest(response);
         }
@@ -33,7 +34,6 @@ namespace ContactBook.Controllers
         {
             var loggedInUser = tokenService.GetLoggedInUser();
             var contactDTO = contactService.ShowMeMyContact(contactId, loggedInUser, out bool isValid);
-            //var contact = contactService.GetContactById(contactId);
             if (contactDTO != null)
                 return Ok(contactDTO);
             return BadRequest();
@@ -45,8 +45,8 @@ namespace ContactBook.Controllers
         {
             var loggedInUser = tokenService.GetLoggedInUser();
             var editedContact = contactService.GetContactById(request.ContactId);
-            var response = contactService.EditContact(request, editedContact, loggedInUser, out bool isEdited);
-            if (isEdited)
+            var response = contactService.EditContact(request, editedContact, loggedInUser, out bool isContactEdited);
+            if (isContactEdited)
                 return Ok(response);
             return BadRequest(response);
         }
@@ -56,8 +56,8 @@ namespace ContactBook.Controllers
         public IActionResult DeleteContact([FromRoute] int contactId)
         {
             var loggedInUser = tokenService.GetLoggedInUser();
-            var response = contactService.DeleteContact(contactId, loggedInUser, out bool isDeleted);
-            if (isDeleted)
+            var response = contactService.DeleteContact(contactId, loggedInUser, out bool isContactDeleted);
+            if (isContactDeleted)
                 return Ok(response);
             return BadRequest(response);
         }

@@ -24,12 +24,12 @@ namespace ContactBook.Services
             return searchedUser;
         }
 
-        public ResponseMessage CreateNewUser(UserRegisterDTO user, out bool isUserCreate)
+        public ResponseMessage CreateNewUser(UserRegisterDTO user, out bool isUserCreated)
         {
             User newUser = new User(user.Email, user.Password);
             if (!DoesUserEmailExist(user.Email))
             {
-                isUserCreate = true;
+                isUserCreated = true;
                 database.Users.Add(newUser);
                 database.SaveChanges();
                 return new ResponseMessage()
@@ -37,7 +37,7 @@ namespace ContactBook.Services
                     Message = "User has been registered"
                 };
             }
-            isUserCreate = false;
+            isUserCreated = false;
             return new ResponseMessage()
             {
                 Message = "User already exists"
