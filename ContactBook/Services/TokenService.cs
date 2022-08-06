@@ -25,7 +25,7 @@ namespace ContactBook.Services
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration.GetSection("AppSettings:Token").Value));
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("Booktrip_Token")));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
