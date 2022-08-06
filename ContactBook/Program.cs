@@ -75,3 +75,5 @@ static void ConfigureDb(IServiceCollection services)
     services.AddDbContext<AppDbContext>(b => b.UseSqlServer(connectionString));
 }
 
+public partial class Program { }
+
