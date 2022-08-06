@@ -42,8 +42,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-          .GetBytes(builder.Configuration
-          .GetSection("AppSettings:Token").Value)),
+         .GetBytes(Environment.GetEnvironmentVariable("Booktrip_Token"))),
         ValidateIssuer = false,
         ValidateAudience = false,
     };
