@@ -3,12 +3,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ContactBook.Database
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext, IDbContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Contact> Contacts { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         { }
+
+        IQueryable<T> IDbContext.Set<T>()
+        {
+            return base.Set<T>();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             //User

@@ -6,8 +6,8 @@ namespace ContactBook.Services
 {
     public class UserService : IUserService
     {
-        private AppDbContext database;
-        public UserService(AppDbContext database)
+        private IDbContext database;
+        public UserService(IDbContext database)
         {
             this.database = database;
         }

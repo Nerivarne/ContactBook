@@ -14,6 +14,7 @@ builder.Services.AddMvc();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IContactService, ContactService>();
+builder.Services.AddScoped<IDbContext, AppDbContext>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
