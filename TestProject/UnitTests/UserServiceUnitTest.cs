@@ -21,7 +21,7 @@ namespace TestProject.UnitTests
         //Testing Database Related stuff
         public UserServiceUnitTest()
         {
-            _userService = (new Mock<UserService>(_mockAppDbContext.Object)).Object;
+            _userService = (new Mock<UserService>(_mockAppDbContext.Object).Object);
         }
 
         [Fact]
